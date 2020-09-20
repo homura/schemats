@@ -21,6 +21,13 @@ function getTime () {
     return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}`
 }
 
+function getOptionValues (options: Options|OptionValues): OptionValues {
+    return options instanceof Options ? {
+        writeHeader: options.options.writeHeader,
+        camelCase: options.options.camelCase
+    } : options
+}
+
 function buildHeader (db: Database, tables: string[], schema: string|null, options: OptionValues): string {
     let commands = ['schemats', 'generate', '-c', db.connectionString.replace(/:\/\/.*@/,'://username:password@')]
     if (options.camelCase) commands.push('-C')
@@ -45,7 +52,7 @@ function buildHeader (db: Database, tables: string[], schema: string|null, optio
     `
 }
 
-export async function typescriptOfTable (db: Database|string, 
+export async function typescriptOfTable (db: Database|string,
                                          table: string,
                                          schema: string,
                                          options = new Options()) {
@@ -63,7 +70,7 @@ export async function typescriptOfTable (db: Database|string,
 export async function typescriptOfSchema (db: Database|string,
                                           tables: string[] = [],
                                           schema: string|null = null,
-                                          options: OptionValues = {}): Promise<string> {
+                                          options: OptionValues| Options = {}): Promise<string> {
     if (typeof db === 'string') {
         db = getDatabase(db)
     }
@@ -76,7 +83,7 @@ export async function typescriptOfSchema (db: Database|string,
         tables = await db.getSchemaTables(schema)
     }
 
-    const optionsObject = new Options(options)
+    const optionsObject = options instanceof Options ? options : new Options(options)
 
     const enumTypes = generateEnumType(await db.getEnumTypes(schema), optionsObject)
     const interfacePromises = tables.map((table) => typescriptOfTable(db, table, schema as string, optionsObject))
@@ -85,7 +92,7 @@ export async function typescriptOfSchema (db: Database|string,
 
     let output = '/* tslint:disable */\n\n'
     if (optionsObject.options.writeHeader) {
-        output += buildHeader(db, tables, schema, options)
+        output += buildHeader(db, tables, schema, getOptionValues(options))
     }
     output += enumTypes
     output += interfaces
@@ -108,5 +115,5 @@ export async function typescriptOfSchema (db: Database|string,
     return processedResult.dest
 }
 
-export {Database, getDatabase} from './schema'
-export {Options, OptionValues}
+export { Database, getDatabase } from './schema'
+export { Options, OptionValues }

@@ -1,5 +1,5 @@
 {
-  "name": "schemats",
+  "name": "@homura/schemats",
   "version": "3.0.3",
   "description": "Generate typescript interface definitions from (postgres) SQL database schema",
   "keywords": [
@@ -38,13 +38,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/bluebird": "^3.0.35",
+    "@types/bluebird": "3.0.35",
     "@types/diff": "^3.2.0",
-    "@types/lodash": "^4.14.37",
+    "@types/lodash": "4.14.37",
     "@types/mocha": "^2.2.39",
     "@types/mysql": "0.0.33",
     "@types/mz": "^0.0.31",
-    "@types/node": "^6.0.77",
+    "@types/node": "6.0.77",
     "@types/power-assert": "^1.4.29",
     "@types/proxyquire": "^1.3.27",
     "@types/sinon": "^2.1.2",
@@ -70,7 +70,7 @@
     "mysql": "^2.13.0",
     "mz": "^2.6.0",
     "pg-promise": "^6.3.6",
-    "typescript": "^2.7.1",
+    "typescript": "2.7.1",
     "typescript-formatter": "^7.0.1",
     "yargs": "^8.0.1"
   },
